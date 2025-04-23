@@ -25,3 +25,8 @@ A simple REST API for managing restaurant menus, built with Express.js. This API
    ```bash
    git clone https://github.com/memo-ibrahim-alean/restaurant-menu-api.git
    cd restaurant-menu-api
+2. Install dependencies: `npm install`
+3. Create a `.env` file in the root directory and add the port: `PORT=3000`
+4. Start the server: `npm start` or `npm run dev` for development
+5. The server will run on `http://localhost:3000` (or the port you specified in `.env`).
+   
