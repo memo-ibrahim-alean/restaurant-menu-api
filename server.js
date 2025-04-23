@@ -83,7 +83,7 @@ app.get("/menus", (req, res) => {
 app.get("/menus/:id", (req, res) => {
   const menuId = parseInt(req.params.id);
   const menu = menus.find((menu) => menu.id === menuId);
-  if (menuIndex === -1) {
+  if (!menu) {
     return res.status(404).json({ message: "Menu not found" });
   }
   res.status(200).json(menu);
@@ -176,3 +176,5 @@ app.delete("/menus/:id", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
