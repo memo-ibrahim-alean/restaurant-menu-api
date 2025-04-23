@@ -66,6 +66,20 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+app.get("/menus", (req, res) => {
+  res.json(menus);
+});
+
+app.get("/menus/:id", (req, res) => {
+  const menuId = parseInt(req.params.id);
+  const menu = menus.find((menu) => menu.id === menuId);
+  if (!menu) {
+    return res.status(404).json({ message: "Menu not found" });
+  }
+
+  res.status(200).json(menu);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
