@@ -114,12 +114,52 @@ app.post("/menus", (req, res) => {
   };
   menus.push(newMenu);
 
-  
   if (!newMenuData.restaurant || !newMenuData.menu) {
-    return res.status(400).json({ message: "Restaurant and menu are required" });
+    return res
+      .status(400)
+      .json({ message: "Restaurant and menu are required" });
   }
-  
+
   res.status(201).json(newMenu);
+});
+
+// Endpoint to update a menu by ID
+// Example: PUT /menus/1
+/* Body: 
+  {
+    "restaurant": "Updated Restaurant",
+    "menu": [
+      {
+        "category": "Starters",
+        "items": [
+          { "name": "Updated Soup", "price": 4.0 }
+        ]
+      }
+    ]
+  }
+*/
+app.put("/menus/:id", (req, res) => {
+  const menuId = parseInt(req.params.id);
+  const menuIndex = menus.findIndex((menu) => menu.id === menuId);
+  if (menuIndex === -1) {
+    return res.status(404).json({ message: "Menu not found" });
+  }
+
+  const updatedMenuData = req.body;
+  const updatedMenu = {
+    id: menuId,
+    restaurant: updatedMenuData.restaurant,
+    menu: updatedMenuData.menu,
+  };
+  menus[menuIndex] = updatedMenu;
+
+  if (!updatedMenuData.restaurant || !updatedMenuData.menu) {
+    return res
+      .status(400)
+      .json({ message: "Restaurant and menu are required" });
+  }
+
+  res.status(200).json(updatedMenu);
 });
 
 app.listen(PORT, () => {
