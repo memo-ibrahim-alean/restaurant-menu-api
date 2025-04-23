@@ -5,6 +5,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
+// Body parser middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 const menus = [
   {
     id: 1,
@@ -62,14 +66,20 @@ const menus = [
   },
 ];
 
+// Endpoint to check if the server is running
+// Example: GET /
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+// Endpoint to get all menus
+// Example: GET /menus
 app.get("/menus", (req, res) => {
   res.json(menus);
 });
 
+// Endpoint to get a specific menu by ID
+// Example: GET /menus/1
 app.get("/menus/:id", (req, res) => {
   const menuId = parseInt(req.params.id);
   const menu = menus.find((menu) => menu.id === menuId);
@@ -78,6 +88,38 @@ app.get("/menus/:id", (req, res) => {
   }
 
   res.status(200).json(menu);
+});
+
+// End point to add a new menu
+// Example: POST /menus
+/* Body: 
+  {
+    "restaurant": "New Restaurant",
+    "menu": [
+      {
+        "category": "Starters",
+        "items": [
+          { "name": "Soup", "price": 3.0 }
+        ]
+      }
+    ]
+  }
+*/
+app.post("/menus", (req, res) => {
+  const newMenuData = req.body;
+  const newMenu = {
+    id: menus.length + 1,
+    restaurant: newMenuData.restaurant,
+    menu: newMenuData.menu,
+  };
+  menus.push(newMenu);
+
+  
+  if (!newMenuData.restaurant || !newMenuData.menu) {
+    return res.status(400).json({ message: "Restaurant and menu are required" });
+  }
+  
+  res.status(201).json(newMenu);
 });
 
 app.listen(PORT, () => {
