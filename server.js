@@ -83,10 +83,9 @@ app.get("/menus", (req, res) => {
 app.get("/menus/:id", (req, res) => {
   const menuId = parseInt(req.params.id);
   const menu = menus.find((menu) => menu.id === menuId);
-  if (!menu) {
+  if (menuIndex === -1) {
     return res.status(404).json({ message: "Menu not found" });
   }
-
   res.status(200).json(menu);
 });
 
@@ -160,6 +159,18 @@ app.put("/menus/:id", (req, res) => {
   }
 
   res.status(200).json(updatedMenu);
+});
+
+// Endpoint to delete a menu by ID
+// Example: DELETE /menus/1
+app.delete("/menus/:id", (req, res) => {
+  const menuId = parseInt(req.params.id);
+  const menuIndex = menus.findIndex((menu) => menu.id === menuId);
+  if (menuIndex === -1) {
+    return res.status(404).json({ message: "Menu not found" });
+  }
+  const deletedMenu = menus.splice(menuIndex, 1)[0];
+  res.json({ message: "Menu deleted", menu: deletedMenu });
 });
 
 app.listen(PORT, () => {
